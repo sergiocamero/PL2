@@ -75,7 +75,7 @@ provincias = [
 
 # Generar datos para empresas
 with open ('E:\\archivos\\archivo_empresas.txt', 'w') as archivo_empresas:
-    for _ in range(9999):  # Generar datos para 10,000 empresas
+    for _ in range(10000):  # Generar datos para 10,000 empresas
         cif = generar_cif()
         nombre_empresa = f"nombre_empresa{cif}"
         direccion = f"Dirección{cif}"
@@ -87,7 +87,7 @@ with open ('E:\\archivos\\archivo_empresas.txt', 'w') as archivo_empresas:
 
 # Generar datos para conductores
 with open ('E:\\archivos\\archivo_conductores.txt', 'w') as archivo_conductores:
-    for _ in range(199999):  # Generar datos para 200,000 conductores
+    for _ in range(200000):  # Generar datos para 200,000 conductores
         dni = generar_dni()
         nombre = random.choice(nombres)
         fecha_contrato = datetime(random.randint(1980, 2020), random.randint(1, 12), random.randint(1, 28)).strftime('%Y-%m-%d')
@@ -99,7 +99,7 @@ with open ('E:\\archivos\\archivo_conductores.txt', 'w') as archivo_conductores:
 
 # Generar datos para vehículos
 with open ('E:\\archivos\\archivo_vehiculos.txt', 'w') as archivo_vehiculos:
-    for _ in range(999999):  # Generar datos para 1 millón de vehículos
+    for _ in range(1000000):  # Generar datos para 1 millón de vehículos
         matricula = generar_matricula()
         marca = random.choice(marcas)
         modelo = random.choice(modelos)
@@ -109,7 +109,7 @@ with open ('E:\\archivos\\archivo_vehiculos.txt', 'w') as archivo_vehiculos:
         archivo_vehiculos.write(f"{matricula},{marca},{modelo},{kilometros},{fecha_matricula},{fecha_matricula.strftime('%Y-%m-%d')},{dni_conductor}\n")
         
 with open ('E:\\archivos\\archivo_bultos.txt', 'w') as archivo_bultos:
-    for i in range(1999999):  # Generar datos para 20,000,000 de bultos
+    for i in range(20000000):  # Generar datos para 20,000,000 de bultos
         id_bulto = i + 1
         direccion_origen = f"Dirección Origen {id_bulto}"
         direccion_destino = f"Dirección Destino {id_bulto}"
@@ -125,7 +125,7 @@ with open ('E:\\archivos\\archivo_bultos.txt', 'w') as archivo_bultos:
 
 # Generar datos para clientes
 with open ('E:\\archivos\\archivo_clientes.txt', 'w') as archivo_clientes:
-    for i in range(1999999):  # Generar datos para 2,000,000 de clientes
+    for i in range(2000000):  # Generar datos para 2,000,000 de clientes
         id_cliente = i + 1
         nombre_cliente = f"nombre_cliente{id_cliente}"
         direccion = f"Dirección{id_cliente}"
