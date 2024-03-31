@@ -1,3 +1,53 @@
+CREATE DATABASE proyectos_empresa;
+
+psql -h localhost -d proyectos_empresa -U postgres -p 5432
+
+CREATE TABLE empleados (
+    numero_empleado NUMERIC PRIMARY KEY,
+    nombre TEXT,
+    apellidos TEXT,
+    salario NUMERIC
+);
+
+-- Crear la tabla proyectos
+CREATE TABLE proyectos (
+    numero_proyecto NUMERIC PRIMARY KEY,
+    nombre TEXT,
+    localizacion TEXT,
+    coste NUMERIC
+);
+
+-- Crear la tabla trabaja_proyectos
+CREATE TABLE trabaja_proyectos (
+    numero_empleado NUMERIC,
+    numero_proyecto NUMERIC,
+    horas NUMERIC,
+    PRIMARY KEY (numero_empleado, numero_proyecto),
+    FOREIGN KEY (numero_empleado) REFERENCES empleados(numero_empleado) ON DELETE RESTRICT,
+    FOREIGN KEY (numero_proyecto) REFERENCES proyectos(numero_proyecto) ON DELETE RESTRICT
+);
+
+/*Cuestion 4*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EXPLAIN SELECT * FROM empleados WHERE  salario>96000;
+Select count (*) from empleados;
+Select count (distinct salario) from empleados;
+Select count (distinct salario) from empleados where salario>96000;
+
+/*Cuestion 5*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EXPLAIN SELECT * FROM trabaja_proyectos WHERE  horas=8;
+Select count (*) from trabaja_proyectos;
+Select count (distinct horas) from trabaja_proyectos;
+Select count (distinct horas) from trabaja_proyectos where horas=8;
+
+/*Cuestion 6*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+EXPLAIN SELECT* FROM Proyectos 
+INNER JOIN trabaja_proyectos on proyectos.numero_proyecto= trabaja_proyectos.numero_proyecto_Proyectos 
+INNER JOIN Empleados on empleados.numero_empleado=trabaja_proyecto.numero_empleado_Empleado 
+WHERE coste>10000 and salario=24000 and horas<3
+
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
 -- pgModeler version: 0.9.4
 -- PostgreSQL version: 13.0
