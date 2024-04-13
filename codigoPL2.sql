@@ -195,5 +195,40 @@ ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 \COPY Camiones FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\registros_camiones.txt" DELIMITER ',' CSV;
 
-CREATE DATABASE Logistica;
+CREATE DATABASE Logistica;	
 psql -h localhost -d Logistica -U postgres -p 5432;
+
+/*CUESTION 8*/
+
+-- Cargar datos de Empresas
+\copy empresas("CIF", nombre, direccion, "Provincia", email, telefono) FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\archivo_empresas.txt" DELIMITER ';' CSV;
+
+-- Cargar datos de Conductores
+\copy conductores("DNI", nombre, fecha_contrato, telefono, salario, "CIF_empresas") FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\archivo_conductores.txt" DELIMITER ';' CSV;
+
+-- Cargar datos de Clientes
+\copy clientes(id_cliente, nombre, direccion, provincia, email, telefono) FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\archivo_clientes.txt" DELIMITER ';' CSV;
+
+-- Cargar datos de Vehículos
+\copy vehiculos(matricula, marca, modelo, kilometros, fecha_matricula, "DNI_conductores") FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\archivo_vehiculos.txt" DELIMITER ';' CSV;
+
+-- Cargar datos de Bultos
+\copy bultos(id_bulto, direccion_origen, direccion_destino, provincia_origen, provincia_destino, peso, fecha_salida, fecha_llegada, matricula_vehiculos, id_cliente_clientes) FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\archivo_bultos.txt" DELIMITER ';' CSV;
+
+/*CUESTION 9*/
+
+SELECT 
+    (COUNT(*) FILTER (WHERE peso > 5 
+    AND (vehiculos.kilometros > 60000 OR conductores.salario > 26000)
+    AND empresas.Provincia != 'Castilla La Mancha'
+    AND fecha_llegada - fecha_salida > 5)
+     * 100.0 / COUNT(*)) AS bultosSuperados
+FROM 
+    bultos
+JOIN 
+    vehiculos ON bultos.matricula_vehiculos = vehiculos.matricula
+JOIN 
+    conductores ON vehiculos.DNI_conductores = conductores.DNI
+JOIN 
+    empresas ON conductores.CIF_empresas = empresas.CIF;
+ 
