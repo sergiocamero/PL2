@@ -43,10 +43,29 @@ Select count (distinct horas) from trabaja_proyectos where horas=8;
 
 /*Cuestion 6*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-EXPLAIN SELECT* FROM Proyectos 
-INNER JOIN trabaja_proyectos on proyectos.numero_proyecto= trabaja_proyectos.numero_proyecto_Proyectos 
-INNER JOIN Empleados on empleados.numero_empleado=trabaja_proyecto.numero_empleado_Empleado 
-WHERE coste>10000 and salario=24000 and horas<3
+SELECT * FROM proyectos 
+INNER JOIN trabaja_proyectos ON proyectos.numero_proyecto = trabaja_proyectos.numero_proyecto
+INNER JOIN empleados ON empleados.numero_empleado = trabaja_proyectos.numero_empleado 
+WHERE coste > 10000 AND salario = 24000 AND horas < 3;
+
+Select count (*) from trabaja_proyectos;
+Select count (*) from proyectos;
+SELECT COUNT(DISTINCT numero_proyecto) AS total_valores_diferentes FROM trabaja_proyectos;
+SELECT COUNT(DISTINCT numero_proyecto) AS total_valores_diferentes FROM proyectos;
+
+Select count (*) from trabaja_proyectos;
+Select count (*) from empleados;
+SELECT COUNT(DISTINCT numero_empleado) AS total_valores_diferentes FROM trabaja_proyectos;
+SELECT COUNT(DISTINCT numero_empleado) AS total_valores_diferentes FROM empleados;
+
+
+SELECT COUNT(DISTINCT salario) AS total_valores_diferentes FROM empleados WHERE salario=24000;
+SELECT COUNT(DISTINCT coste) AS total_valores_diferentes FROM Proyectos WHERE coste>10000;
+SELECT COUNT(DISTINCT horas) AS total_valores_diferentes FROM trabaja_proyectos WHERE horas<3;
+
+/*Cuestion 7*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
 -- pgModeler version: 0.9.4
@@ -63,9 +82,9 @@ CREATE DATABASE new_database;
 -- ddl-end --
 
 
--- object: public.bultos | type: TABLE --
--- DROP TABLE IF EXISTS public.bultos CASCADE;
-CREATE TABLE public.bultos (
+-- object: bultos | type: TABLE --
+-- DROP TABLE IF EXISTS bultos CASCADE;
+CREATE TABLE bultos (
 	id_bulto integer NOT NULL,
 	direccion_origen text NOT NULL,
 	direccion_destino text NOT NULL,
@@ -79,12 +98,12 @@ CREATE TABLE public.bultos (
 	CONSTRAINT bultos_pk PRIMARY KEY (id_bulto)
 );
 -- ddl-end --
-ALTER TABLE public.bultos OWNER TO postgres;
+ALTER TABLE bultos OWNER TO postgres;
 -- ddl-end --
 
--- object: public.vehiculos | type: TABLE --
--- DROP TABLE IF EXISTS public.vehiculos CASCADE;
-CREATE TABLE public.vehiculos (
+-- object: vehiculos | type: TABLE --
+-- DROP TABLE IF EXISTS vehiculos CASCADE;
+CREATE TABLE vehiculos (
 	matricula char(7) NOT NULL,
 	marca text NOT NULL,
 	modelo text NOT NULL,
@@ -94,12 +113,12 @@ CREATE TABLE public.vehiculos (
 	CONSTRAINT vehiculos_pk PRIMARY KEY (matricula)
 );
 -- ddl-end --
-ALTER TABLE public.vehiculos OWNER TO postgres;
+ALTER TABLE vehiculos OWNER TO postgres;
 -- ddl-end --
 
--- object: public.empresas | type: TABLE --
--- DROP TABLE IF EXISTS public.empresas CASCADE;
-CREATE TABLE public.empresas (
+-- object: empresas | type: TABLE --
+-- DROP TABLE IF EXISTS empresas CASCADE;
+CREATE TABLE empresas (
 	"CIF" char(9) NOT NULL,
 	nombre text NOT NULL,
 	direccion text NOT NULL,
@@ -111,12 +130,12 @@ CREATE TABLE public.empresas (
 	CONSTRAINT emresas_pk PRIMARY KEY ("CIF")
 );
 -- ddl-end --
-ALTER TABLE public.empresas OWNER TO postgres;
+ALTER TABLE empresas OWNER TO postgres;
 -- ddl-end --
 
--- object: public.conductores | type: TABLE --
--- DROP TABLE IF EXISTS public.conductores CASCADE;
-CREATE TABLE public.conductores (
+-- object: conductores | type: TABLE --
+-- DROP TABLE IF EXISTS conductores CASCADE;
+CREATE TABLE conductores (
 	"DNI" char(9) NOT NULL,
 	nombre text NOT NULL,
 	fecha_contrato date NOT NULL,
@@ -126,12 +145,12 @@ CREATE TABLE public.conductores (
 	CONSTRAINT conductores_pk PRIMARY KEY ("DNI")
 );
 -- ddl-end --
-ALTER TABLE public.conductores OWNER TO postgres;
+ALTER TABLE conductores OWNER TO postgres;
 -- ddl-end --
 
--- object: public.clientes | type: TABLE --
--- DROP TABLE IF EXISTS public.clientes CASCADE;
-CREATE TABLE public.clientes (
+-- object: clientes | type: TABLE --
+-- DROP TABLE IF EXISTS clientes CASCADE;
+CREATE TABLE clientes (
 	id_cliente integer NOT NULL,
 	nombre text NOT NULL,
 	direccion text NOT NULL,
@@ -143,35 +162,38 @@ CREATE TABLE public.clientes (
 	CONSTRAINT clientes_pk PRIMARY KEY (id_cliente)
 );
 -- ddl-end --
-ALTER TABLE public.clientes OWNER TO postgres;
+ALTER TABLE clientes OWNER TO postgres;
 -- ddl-end --
 
 -- object: vehiculos_fk | type: CONSTRAINT --
--- ALTER TABLE public.bultos DROP CONSTRAINT IF EXISTS vehiculos_fk CASCADE;
-ALTER TABLE public.bultos ADD CONSTRAINT vehiculos_fk FOREIGN KEY (matricula_vehiculos)
-REFERENCES public.vehiculos (matricula) MATCH FULL
+-- ALTER TABLE bultos DROP CONSTRAINT IF EXISTS vehiculos_fk CASCADE;
+ALTER TABLE bultos ADD CONSTRAINT vehiculos_fk FOREIGN KEY (matricula_vehiculos)
+REFERENCES vehiculos (matricula) MATCH FULL
 ON DELETE RESTRICT ON UPDATE RESTRICT;
 -- ddl-end --
 
 -- object: clientes_fk | type: CONSTRAINT --
--- ALTER TABLE public.bultos DROP CONSTRAINT IF EXISTS clientes_fk CASCADE;
-ALTER TABLE public.bultos ADD CONSTRAINT clientes_fk FOREIGN KEY (id_cliente_clientes)
-REFERENCES public.clientes (id_cliente) MATCH FULL
+-- ALTER TABLE bultos DROP CONSTRAINT IF EXISTS clientes_fk CASCADE;
+ALTER TABLE bultos ADD CONSTRAINT clientes_fk FOREIGN KEY (id_cliente_clientes)
+REFERENCES clientes (id_cliente) MATCH FULL
 ON DELETE RESTRICT ON UPDATE RESTRICT;
 -- ddl-end --
 
 -- object: empresas_fk | type: CONSTRAINT --
--- ALTER TABLE public.conductores DROP CONSTRAINT IF EXISTS empresas_fk CASCADE;
-ALTER TABLE public.conductores ADD CONSTRAINT empresas_fk FOREIGN KEY ("CIF_empresas")
-REFERENCES public.empresas ("CIF") MATCH FULL
+-- ALTER TABLE conductores DROP CONSTRAINT IF EXISTS empresas_fk CASCADE;
+ALTER TABLE conductores ADD CONSTRAINT empresas_fk FOREIGN KEY ("CIF_empresas")
+REFERENCES empresas ("CIF") MATCH FULL
 ON DELETE RESTRICT ON UPDATE RESTRICT;
 -- ddl-end --
 
 -- object: conductores_fk | type: CONSTRAINT --
--- ALTER TABLE public.vehiculos DROP CONSTRAINT IF EXISTS conductores_fk CASCADE;
-ALTER TABLE public.vehiculos ADD CONSTRAINT conductores_fk FOREIGN KEY ("DNI_conductores")
-REFERENCES public.conductores ("DNI") MATCH FULL
+-- ALTER TABLE vehiculos DROP CONSTRAINT IF EXISTS conductores_fk CASCADE;
+ALTER TABLE vehiculos ADD CONSTRAINT conductores_fk FOREIGN KEY ("DNI_conductores")
+REFERENCES conductores ("DNI") MATCH FULL
 ON DELETE RESTRICT ON UPDATE RESTRICT;
 -- ddl-end --
 
+\COPY Camiones FROM "D:\\GISI\\2º\\BASES DE DATOS AVANZADAS\\LABORATORIO\\registros_camiones.txt" DELIMITER ',' CSV;
 
+CREATE DATABASE Logistica;
+psql -h localhost -d Logistica -U postgres -p 5432;
