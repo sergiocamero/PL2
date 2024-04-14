@@ -231,4 +231,102 @@ JOIN
     conductores ON vehiculos.DNI_conductores = conductores.DNI
 JOIN 
     empresas ON conductores.CIF_empresas = empresas.CIF;
+
+
+/*CUESTION 10*/
+-- Agregar índices: Para mejorar el rendimiento de las cláusulas WHERE y JOIN, 
+
+CREATE INDEX idx_peso ON bultos (peso);
+CREATE INDEX idx_kilometros ON vehiculos (kilometros);
+CREATE INDEX idx_salario ON conductores (salario);
+CREATE INDEX idx_provincia ON empresas (provincia);
+
  
+-- Ejecutar EXPLAIN ANALYZE: Para obtener el plan de ejecución de la consulta después de realizar las mejoras. 
+
+EXPLAIN ANALYZE
+SELECT 
+    (COUNT(*) FILTER (WHERE peso > 5 
+    AND (vehiculos.kilometros > 60000 OR conductores.salario > 26000)
+    AND empresas.Provincia != 'Castilla La Mancha'
+    AND fecha_llegada - fecha_salida > 5)
+     * 100.0 / COUNT(*)) AS bultosSuperados
+FROM 
+    bultos
+JOIN 
+    vehiculos ON bultos.matricula_vehiculos = vehiculos.matricula
+JOIN 
+    conductores ON vehiculos.DNI_conductores = conductores.DNI
+JOIN 
+    empresas ON conductores.CIF_empresas = empresas.CIF;
+
+/*CUESTION 11*/
+
+-- El numero de empresas que representan el 30%
+SELECT COUNT(*) * 0.3 AS num_to_delete FROM empresas;
+
+-- Utilizar una consulta para seleccionar aleatoriamente el 30% de las empresas y sus datos relacionados para el borrado.
+
+DELETE FROM empresas
+WHERE id_empresas IN (
+    SELECT id_empresas
+    FROM empresas
+    ORDER BY random()
+    LIMIT (
+        SELECT COUNT(*) * 0.3
+        FROM empresas
+    )
+);
+
+-- Para medir el tiempo empleado en el borrado, utilizamos la función EXPLAIN ANALYZE:
+
+EXPLAIN ANALYZE
+DELETE FROM empresas
+WHERE id_empresas IN (
+    SELECT id_empresas
+    FROM empresas
+    ORDER BY random()
+    LIMIT (
+        SELECT COUNT(*) * 0.3
+        FROM empresas
+    )
+);
+
+/*CUESTION 12*/
+
+-- Volvemos a ejecutar la consulta 
+SELECT 
+    (COUNT(*) FILTER (WHERE peso > 5 
+    AND (vehiculos.kilometros > 60000 OR conductores.salario > 26000)
+    AND empresas.Provincia != 'Castilla La Mancha'
+    AND fecha_llegada - fecha_salida > 5)
+     * 100.0 / COUNT(*)) AS bultosSuperados
+FROM 
+    bultos
+JOIN 
+    vehiculos ON bultos.matricula_vehiculos = vehiculos.matricula
+JOIN 
+    conductores ON vehiculos.DNI_conductores = conductores.DNI
+JOIN 
+    empresas ON conductores.CIF_empresas = empresas.CIF;
+-- Realizamos el EXPLAIN de nuevo 
+EXPLAIN SELECT 
+    (COUNT(*) FILTER (WHERE peso > 5 
+    AND (vehiculos.kilometros > 60000 OR conductores.salario > 26000)
+    AND empresas.Provincia != 'Castilla La Mancha'
+    AND fecha_llegada - fecha_salida > 5)
+     * 100.0 / COUNT(*)) AS bultosSuperados
+FROM 
+    bultos
+JOIN 
+    vehiculos ON bultos.matricula_vehiculos = vehiculos.matricula
+JOIN 
+    conductores ON vehiculos.DNI_conductores = conductores.DNI
+JOIN 
+    empresas ON conductores.CIF_empresas = empresas.CIF;
+
+-- Al comparar el plan de ejecución obtenido con el comando EXPLAIN después de realizar las mejoras de la cuestion 10, 
+-- observamos que el plan de ejecución se ha optimizado después de agregar los índices, 
+-- lo que implica un tiempo de ejecución más rápido y un uso más eficiente de los recursos del sistema.
+
+/*CUESTION 13*/
